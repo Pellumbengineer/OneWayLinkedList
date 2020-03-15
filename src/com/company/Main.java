@@ -30,21 +30,27 @@ class OneWayLinkedList<E> implements IList<E>{
 
     Element sentinel;
 
-    private class InnerIterator implements Iterator<E>{
+    private class InnerIterator implements Iterator<E> {
         // TODO
+        Element actElement;
+
         public InnerIterator() {
             // TODO
+            actElement = sentinel.next;
         }
+
         @Override
         public boolean hasNext() {
             // TODO
-            return false;
+            return actElement != null;
         }
 
         @Override
         public E next() {
             // TODO
-            return null;
+            E value = actElement.object;
+            actElement = actElement.next;
+            return value;
         }
     }
 
@@ -75,21 +81,25 @@ class OneWayLinkedList<E> implements IList<E>{
     public boolean add(E e) {
         // TODO Auto-generated method stub
 
-        Element newElem=new Element(e);
-        if(head==null){
-            head=newElem;
-            return true;
-        }
-        Element tail=head;
-        while(tail.getNext()!=null)
-            tail=tail.getNext();
-        tail.setNext(newElem);
+        Element newElem = new Element(e);
+
+        Element tail = sentinel.next;
+        while (tail.next != null)
+            tail = tail.next;
+        tail.next = newElem;
         return true;
     }
 
     @Override
     public void add(int index, E element) throws NoSuchElementException {
         // TODO Auto-generated method stub
+        Element newElem = new Element(element);
+        Element e = sentinel.next;
+        for(int i = 0; i < index; i++) {
+            e = e.next;
+        }
+        e.next = newElem;
+        newElem.next = e.next.next;
 
     }
 
@@ -144,7 +154,15 @@ class OneWayLinkedList<E> implements IList<E>{
     @Override
     public int size() {
         // TODO Auto-generated method stub
-        return 0;
+        int pos=0;
+        Element actElem=sentinel.next;
+        while(actElem!=null)
+        {
+            pos++;
+            actElem=actElem.next;
+        }
+        return pos;
+
     }
 
 }
