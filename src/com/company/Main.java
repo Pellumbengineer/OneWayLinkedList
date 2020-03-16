@@ -1,7 +1,6 @@
 package com.company;
 
 import java.util.*;
-
 interface IList<E> extends Iterable<E> {
     boolean add(E e); // qdd element to the end of list
 
@@ -82,7 +81,7 @@ class OneWayLinkedList<E> implements IList<E> {
     @Override
     public boolean add(E e) {
         Element newElem = new Element(e);
-        Element tail = sentinel.next;
+        Element tail = sentinel;
         while (tail.next != null)
             tail = tail.next;
         tail.next = newElem;
@@ -139,14 +138,15 @@ class OneWayLinkedList<E> implements IList<E> {
 
     @Override
     public int indexOf(E element) {
+
         int pos = 0;
-        while (iterator().hasNext()) {
-            pos = pos + 1;
-            if (iterator().next() == element) {
-                break;
+        while(iterator().hasNext()){
+            if(iterator().next().equals(element)) {
+                return pos;
             }
+            pos = pos + 1;
         }
-        return pos;
+        return -1;
     }
 
     @Override
@@ -160,7 +160,7 @@ class OneWayLinkedList<E> implements IList<E> {
 
     @Override
     public E remove(int index) throws NoSuchElementException {
-        Element e = sentinel.next;
+        Element e = sentinel;
         Element deleted = null;
         Element prev = sentinel;
         if (isEmpty()) {
@@ -239,7 +239,7 @@ class Document {
     public Document(String name, Scanner scan) {
         this.name = name;
         links = new OneWayLinkedList<Link>();
-        load(scan);
+
         load(scan);
     }
 
@@ -279,6 +279,8 @@ public class Main {
     static Scanner scan; // for input stream
 
     public static void main(String[] args) {
+
+
         System.out.println("START");
         scan = new Scanner(System.in);
         Document[] doc = null;
