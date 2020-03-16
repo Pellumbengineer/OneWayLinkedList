@@ -213,6 +213,22 @@ class Link {
     public Link(String ref) {
         this.ref = ref;
     }
+
+    public String getRef() {
+        return ref;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Link))
+            return false;
+        Link temp = (Link) obj;
+        return ref.equals(temp.ref);
+    }
+
+    public boolean equals(Link link) {
+        return ref.equals(link.ref);
+    }
     // in the future there will be more fields
 }
 
@@ -221,31 +237,46 @@ class Document {
     public OneWayLinkedList<Link> links;
 
     public Document(String name, Scanner scan) {
-        // TODO
+        this.name = name;
+        links = new OneWayLinkedList<Link>();
+        load(scan);
         load(scan);
     }
 
     public void load(Scanner scan) {
-        //TODO
+        String input;
+        while (!(input = scan.nextLine()).equalsIgnoreCase("eod")) {
+            String[] arr = input.split("\\s+");
+            for (String word : arr) {
+                if (correctLink(word)) {
+                    Link temp = new Link(word.substring(5).toLowerCase());
+                    links.add(temp);
+                }
+            }
+        }
     }
 
     // accepted only small letters, capitalic letter, digits nad '_' (but not on the begin)
     private static boolean correctLink(String link) {
-        return true;
+        return link.toLowerCase().matches("link=[A-Za-z][0-9A-Za-z_]*$");
     }
 
     @Override
     public String toString() {
-        return null;
+        StringBuffer strBuffer = new StringBuffer();
+        Iterator<Link> it = links.iterator();
+        strBuffer.append("Document: " + name);
+        while (it.hasNext()) {
+            strBuffer.append("\n" + it.next().getRef());
+        }
+        return strBuffer.toString();
     }
 
 }
 
 public class Main {
 
-
     static Scanner scan; // for input stream
-
 
     public static void main(String[] args) {
         System.out.println("START");
@@ -273,7 +304,6 @@ public class Main {
                 currentDocNo = Integer.parseInt(word[1]);
                 continue;
             }
-
             // ld documentName
             if (word[0].equalsIgnoreCase("ld") && word.length == 2) {
                 doc[currentDocNo] = new Document(word[1], scan);
@@ -363,8 +393,5 @@ public class Main {
         }
         System.out.println("END OF EXECUTION");
         scan.close();
-
     }
-
-
 }
